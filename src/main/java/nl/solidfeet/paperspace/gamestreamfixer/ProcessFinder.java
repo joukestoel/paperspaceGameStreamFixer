@@ -1,5 +1,7 @@
 package nl.solidfeet.paperspace.gamestreamfixer;
 
+import com.opencsv.CSVParser;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,7 +12,7 @@ public class ProcessFinder {
     final String filter = "/FO CSV /FI \"IMAGENAME eq %s\"";
 
     public Optional<String> getProcessPID(String processName) {
-        Optional<String> pid;
+        Optional<String> pid = Optional.empty();
 
         Process p = null;
         try {
@@ -18,6 +20,8 @@ public class ProcessFinder {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        CSVParser csvParser = new CSVParser();
 
         String line;
         try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
@@ -27,13 +31,13 @@ public class ProcessFinder {
 
             if (line != null) {
                 // parse the CSV
-
+                String[] csvParsedLine = csvParser.parseLine(line);
+                pid = Optional.of(csvParsedLine[1]);
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        return pid;
     }
 }
