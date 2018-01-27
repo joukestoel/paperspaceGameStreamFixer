@@ -11,7 +11,7 @@ public class ProcessFinderTest {
     @Test
     public void testExistingProcess() {
         ProcessFinder finder = new ProcessFinder();
-        Optional<String> pid = finder.getProcessPID("tasklist.exe");
+        Optional<String> pid = finder.findProcess("tasklist.exe");
 
         assertTrue(pid.isPresent());
     }
@@ -19,7 +19,7 @@ public class ProcessFinderTest {
     @Test
     public void testNonExistingProcess() {
         ProcessFinder finder = new ProcessFinder();
-        Optional<String> pid = finder.getProcessPID("nonexistingprocess.exe");
+        Optional<String> pid = finder.findProcess("nonexistingprocess.exe");
 
         assertFalse(pid.isPresent());
     }

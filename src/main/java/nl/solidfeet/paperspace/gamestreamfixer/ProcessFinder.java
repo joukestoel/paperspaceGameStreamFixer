@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public class ProcessFinder {
 
-    final String filter = "/FO CSV /FI \"IMAGENAME eq %s\"";
+    private final String filter = "/FO CSV /FI \"IMAGENAME eq %s\"";
 
-    public Optional<String> getProcessPID(String processName) {
+    public Optional<String> findProcess(String processName) {
         Optional<String> pid = Optional.empty();
 
         Process p = null;
@@ -23,11 +23,10 @@ public class ProcessFinder {
 
         CSVParser csvParser = new CSVParser();
 
-        String line;
         try (BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()))) {
             // Always skip the first line (header or message saying there is no process with that name
             input.readLine();
-            line = input.readLine();
+            String line = input.readLine();
 
             if (line != null) {
                 // parse the CSV
